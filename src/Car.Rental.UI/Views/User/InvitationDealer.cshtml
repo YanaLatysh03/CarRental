@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "InvitationDealer";
+    ViewData["ActivePage"] = "INVITE DEALER";
+}
+
+<link rel="stylesheet" href="~/css/InvitationDealer.css" />
+
+<form method="post" asp-controller="User" asp-action="InviteDealer">
+    <div class="form-group">
+        <label for="formGroupExampleInput">Email</label>
+        <input type="text" class="form-control" name="email" placeholder="Email">
+    </div>
+    <div class="btn-group">
+        <input class="btn btn-primary" type="submit" value="SEND" />
+    </div>
+</form>
+
+@if (TempData["InviteSuccess"] is true)
+{
+    <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        Success! You send invitation.
+    </div>
+}

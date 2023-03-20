@@ -1,0 +1,214 @@
+﻿@using Car.Models.Response
+@using Database.Entities
+@using static Car.Models.Response.CreatePaginationResponseModel
+@model CreatePaginationResponseModel
+@{
+    ViewData["Title"] = "CarCatalogue";
+    ViewData["ActivePage"] = "ALL CARS";
+}
+<link rel="stylesheet" href="~/css/Catalogue.css" />
+
+<form id="formData" method="post" enctype="multipart/form-data">
+    <div class="form-row priceyear" >
+        <div class="col-2">
+            <label>Price</label>
+            <input type="number" class="form-control" id="pricefrom" asp-for="Filter.PriceFrom" placeholder="from">
+        </div>
+        <div class="col-2">
+            <label>Price</label>
+            <input type="number" class="form-control" id="priceto" asp-for="Filter.PriceTo" placeholder="to">
+        </div>
+        <div class="col-2">
+            <label>Year</label>
+            <input type="number" id="yearfrom" class="form-control" asp-for="Filter.YearFrom" placeholder="from">
+        </div>
+        <div class="col-2">
+            <label>Year</label>
+            <input type="number" class="form-control" id="yearto" asp-for="Filter.YearTo" placeholder="to">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-2">
+            <label>Access</label>
+            <select class="form-select" id="access" asp-for="Filter.Access">
+                @foreach (var item in Model.Access) {
+                    <option>@item</option>
+                }
+            </select>
+        </div>
+        <div class="col-2">
+            <label>Brand</label>
+            <select class="form-select" id="brand" asp-for="Filter.Brand">
+                @foreach (var item in Model.Brand)
+                {
+                    <option>@item</option>
+                }
+            </select>
+        </div>
+        <div class="col-2">
+            <label>Color</label>
+            <select class="form-select" id="color" asp-for="Filter.Color">
+                @foreach(var item in Model.Color){
+                    <option>@item</option>
+                }
+            </select>
+        </div>
+    </div>
+    <input class="btn btn-primary filterButton" id="applyFilter" type="submit" asp-controller="Cars" asp-action="GetCarsByFilter" value="APPLY" />
+    <input class="btn btn-primary resetButton" type="button" id="reset-button" value="RESET" onclick="Reset()" />
+</form>
+
+@if (TempData["success"] is true)
+{
+    <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        Success! You log in.
+    </div>
+}
+
+<script>
+
+    function Reset() {
+        document.getElementById("color").selectedIndex = 0;
+        document.getElementById("brand").selectedIndex = 0;
+        document.getElementById("access").selectedIndex = 0;
+        document.getElementById("pricefrom").value = "";
+        document.getElementById("priceto").value = "";
+        document.getElementById("yearfrom").value = "";
+        document.getElementById("yearto").value = "";
+    }
+
+</script>
+
+<div class="container">
+    <div class="card-columns">
+
+        @foreach (var item in Model.Cars)
+        {
+            var base64Image = Convert.ToBase64String(item.Car.Image);
+            <div class="card">
+                <img class="card-img-top" src='@(string.Format("data:image/jpeg;base64,{0}", base64Image))' height="300">
+                <div class="card-body">
+                    <h4>@item.Car.Brand</h4>
+                    <h5>@item.Car.Year @item.Car.Color</h5>
+                    <h6>@item.Car.Price</h6>
+                    @if (item.Car.IsAccident)
+                    {
+                        <h7>The car was in an accident</h7>
+                    }
+                    else
+                    {
+                        <h7>The car wasn't' in an accident</h7>
+                    }
+                    <div class="row">
+                        <div class="col">
+                            <a href="#" data-toggle="modal" data-target="#myModal">Dealer</a>
+                            <div class="modal fade" id="myModal" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">@item.Dealer.FirstName @item.Dealer.LastName</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                <span class="data">Email: </span>@item.Dealer.Email
+                                            </p>
+                                            <p>
+                                                <span class="data">City: </span>@item.Dealer.City
+                                            </p>
+                                            <p>
+                                                <span class="data">Phone number: </span>@item.Dealer.PhoneNumber
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            @if (item.Car.Access == RentAccess.Rented)
+                            {
+                                <a class="btn rentCar" id="notFree">Rent</a>
+                            }
+                            else
+                            {
+                                <a class="btn rentCar" asp-controller="Rent" asp-action="RentCar" asp-route-carId=@item.Car.Id>Rent</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="alert alert-primary" id="notFreeNotication">
+    <a href="#" id="crossClosure" class="close" aria-label="close">&times;</a>
+    This car is rented!
+</div>
+
+<nav aria-label="Search results pages">
+    <ul id="pagWithoutFilt" class="pagination justify-content-center">
+        @if (Model.Pages.CurrentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-controller="Cars" asp-action="GetCarCatalogue" asp-route-page=@(Model.Pages.CurrentPage - 1)>Previous</a>
+            </li>
+        }
+
+        @for (var page = 1; page <= Model.Pages.TotalPages; page++)
+        {
+            <li class="page-item @(page == Model.Pages.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-controller="Cars" asp-action="GetCarCatalogue" asp-route-page=@(page)>@(page)</a>
+            </li>
+        }
+
+        @if (Model.Pages.CurrentPage < Model.Pages.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-controller="Cars" asp-action="GetCarCatalogue" asp-route-page=@(Model.Pages.CurrentPage + 1)>Next</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+<script>
+    // Change pagination form for filtration
+    if ("@Model.IsApplyFilter" == "True"){
+        changePagination();
+    }
+
+    async function changePagination() {
+        var pag = await document.getElementById("pagWithoutFilt");
+        pag.style.display = "none"
+    }
+
+    const buttons = document.querySelectorAll("#notFree");
+
+    buttons.forEach(butt => {
+        butt.addEventListener("click", notFreeNotification);
+    });
+
+    async function notFreeNotification(e) {
+        var notif = await document.getElementById("notFreeNotication");
+
+        notif.style.display = "flex"
+    }
+
+    const closure = document.querySelectorAll("#crossClosure");
+
+    closure.forEach(close => {
+        close.addEventListener("click", doFreeNotification);
+    });
+
+    async function doFreeNotification(e) {
+        var notif = await document.getElementById("notFreeNotication");
+
+        notif.style.display = "none"
+    }
+</script>
+
+

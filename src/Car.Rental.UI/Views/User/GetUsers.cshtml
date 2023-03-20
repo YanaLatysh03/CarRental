@@ -1,0 +1,64 @@
+﻿@model GetUsersResponseModel
+@{
+    ViewData["Title"] = "GetUsers";
+    ViewData["ActivePage"] = "ALL USERS";
+}
+
+<div class="container">
+    <table class="table">
+        <tr>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>City</th>
+            <th>Email</th>
+            <th>PhoneNumber</th>
+            <th>Role</th>
+        </tr>
+        @foreach (var item in Model.Users)
+        {
+            <tr>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.City</td>
+                <td>@item.Email</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.Role</td>
+                <td class="btn-group">
+                    <a class="btn btn-outline-secondary" asp-controller="User" asp-action="BlockUser" asp-route-email="@item.Email" role="button">Block</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+    @if (@TempData["successBlock"] is true)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            Success! You blocked user.
+        </div>
+    }
+<nav aria-label="Search results pages">
+    <ul class="pagination justify-content-center">
+        @if (Model.Pages.CurrentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="~/user?page=@(Model.Pages.CurrentPage - 1)">Previous</a>
+            </li>
+        }
+
+        @for (var page = 1; page <= Model.Pages.TotalPages; page++)
+        {
+            <li class="page-item @(page == Model.Pages.CurrentPage ? "active" : "")">
+                <a class="page-link" href="~/user?page=@(page)">@(page)</a>
+            </li>
+        }
+
+        @if (Model.Pages.CurrentPage < Model.Pages.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" href="~/user?page=@(Model.Pages.CurrentPage + 1)">Next</a>
+            </li>
+        }
+    </ul>
+
+</nav>

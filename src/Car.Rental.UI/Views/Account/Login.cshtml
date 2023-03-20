@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    ViewData["ActivePage"] = "LOG IN";
+}
+<link rel="stylesheet" href="~/css/login.css" />
+
+<form method="post">
+    <div class="form-group">
+        <label for="formGroupExampleInput">Email</label>
+        <input type="text" class="form-control" name="username" placeholder="Email">
+    </div>
+    <div class="form-group">
+        <label for="formGroupExampleInput2">Password</label>
+        <input type="text" class="form-control" placeholder="Password" name="password">
+    </div>
+    <div class="btn-group">
+        <input class="btn btn-primary" type="submit" value="LOGIN" />
+    </div>
+    <div class="form-check checkbox-lg">
+        <label>Remember me</label>
+        <input type="checkbox" value="true" placeholder="Accident">
+    </div>
+</form>
+
+<div class="register">
+    <span class="needAcc"> Need an account? </span>
+    <a class="btn signUp" asp-controller="Account" asp-action="RegisterUser" role="button">Sign up</a>
+</div>
+
+

@@ -1,0 +1,50 @@
+﻿body {
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.form-group {
+    width: 250px;
+}
+
+.alert {
+    position: absolute;
+    bottom: 35rem;
+    left: 45rem;
+}
+
+.form-control:focus {
+    border-color: #c22f1b;
+    box-shadow: 0 0 0 0.2rem rgb(255 94 0 / 38%);
+}
+
+.btn-primary:hover {
+    color: #212529;
+    background-color: white;
+    border-color: #212529;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #c22f1b;
+    border-color: #151616;
+}
+
+.btn {
+    font-weight: 700;
+    width: 100px;
+}
+
+.btn-group, .btn-group-vertical {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 12px;
+}
+

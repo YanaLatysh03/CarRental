@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewData["Title"] = "EnterCode";
+}
+
+<link rel="stylesheet" href="~/css/login.css" />
+
+<h1>Enter the code that was sent to @ViewData["Email"]</h1>
+
+<form method="post" asp-controller="Account" asp-action="ConfirmEmailByCode" asp-route-email=@ViewData["Email"]>
+    <div class="form-group">
+        <label for="emailCode">Code</label>
+        <input type="number" id="emailCode" class="form-control" name="code" placeholder="Enter code">
+    </div>
+    <div>
+        <input type="submit" value="Enter" />
+    </div>
+</form>
+

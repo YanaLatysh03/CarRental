@@ -1,0 +1,57 @@
+﻿@model Car.Models.Response.GetCarCatalogueResponseModel
+@{
+    ViewData["Title"] = "GetCarById";
+    ViewData["ActivePage"] = "CAR";
+}
+<link rel="stylesheet" href="~/css/GetRentedCars.css" />
+
+<div class="card">
+    <img class="card-img-top" src="/Car/GetImageCar?carId=@Model.Car.Id" height="300">
+    <div class="card-body">
+        <h4>@Model.Car.Brand</h4>
+        <h5>@Model.Car.Year @Model.Car.Color</h5>
+        <h6>@Model.Car.Price</h6>
+        @if (Model.Car.IsAccident)
+        {
+            <h7>The car was in an accident</h7>
+        }
+        else
+        {
+            <h7>The car wasn't' in an accident</h7>
+        }
+        <div class="row">
+            <div class="col">
+                <a href="#" data-toggle="modal" data-target="#myModal">Dealer</a>
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">@Model.Dealer.FirstName @Model.Dealer.LastName</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>
+                                    <span class="data">Email: </span>@Model.Dealer.Email
+                                </p>
+                                <p>
+                                    <span class="data">City: </span>@Model.Dealer.City
+                                </p>
+                                <p>
+                                    <span class="data">Phone number: </span>@Model.Dealer.PhoneNumber
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="btn-group">
+    <a type="button" class="btn btn-primary return" asp-controller="Rent" asp-action="GetRentCars">RETURN</a>
+</div>
+

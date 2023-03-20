@@ -1,0 +1,133 @@
+﻿body {
+}
+
+.pb-3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.alert {
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+#notFreeNotication {
+    display: none;
+    flex-direction: row-reverse;
+    align-items: center;
+    position: sticky;
+    bottom: 400px;
+}
+
+.card-columns {
+    column-count: 2;
+}
+
+.modal-header {
+    display: block;
+}
+
+a {
+    color: #c22f1b;
+    font-size: 16px;
+}
+
+a:hover {
+    color: #1c1e20a6;
+}
+
+.data {
+    font-weight:700;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+.form-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.pagination {
+    display: flex;
+}
+
+#pagWithFilt {
+    display: none;
+}
+
+.btn-primary:hover {
+    color: black;
+    background-color: white;
+    border-color: #212529;
+}
+
+.btn-primary {
+    color: black;
+    background-color: #bfbbbb6e;
+    border-color: #151616;
+}
+
+.btn {
+    font-weight: 700;
+    width: 100px;
+    height: 35px;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active {
+    color: black;
+    background-color: white;
+    border-color: black;
+}
+
+.filterButton {
+    position: relative;
+    bottom: 50px;
+    left: 650px
+}
+
+.priceyear {
+    margin-bottom: 15px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: 500;
+}
+
+select {
+    border-color: #ced4da;
+    width: inherit;
+}
+
+.form-control:focus {
+    color: black;
+    background-color: #fff;
+    border-color: black;
+    border-width: 2px;
+    outline: 0;
+    box-shadow: none;
+}
+
+.rentCar {
+    font-weight: 700;
+    width: 100px;
+    font-size: 16px;
+    border-color: black;
+}
+
+.resetButton {
+    position: relative;
+    bottom: 50px;
+    left: 700px;
+}

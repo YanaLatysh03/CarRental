@@ -1,0 +1,58 @@
+﻿@model UserResponseModel
+@{
+    ViewData["Title"] = "UpdateUser";
+    ViewData["ActivePage"] = "PERSONAL DATA";
+}
+<link rel="stylesheet" href="~/css/UpdateUser.css" />
+
+<form method="post">
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>FirstName</label>
+                <input type="text" class="form-control" asp-for="FirstName" placeholder=@Model.FirstName>
+            </div>
+            <div class="form-group">
+                <label>LastName</label>
+                <input type="text" class="form-control" asp-for="LastName" placeholder=@Model.LastName>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="text" class="form-control" asp-for="Email" placeholder=@Model.Email>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Password</label>
+                <input type="text" class="form-control" asp-for="Password" placeholder=@Model.Password>
+            </div>
+            <div class="form-group">
+                <label>PhoneNumber</label>
+                <input type="text" class="form-control" asp-for="PhoneNumber" placeholder=@Model.PhoneNumber>
+            </div>
+            <div class="form-group">
+                <label>City</label>
+                <input type="text" class="form-control" asp-for="City" placeholder=@Model.City>
+            </div>
+        </div>
+    </div>
+    <div class="btn-group">
+        <input type="submit" class="btn btn-primary" asp-controller="User" asp-action="UpdateUser" value="UPDATE" />
+    </div>
+</form>
+
+@if (TempData["UpdateData"] is true)
+{
+    <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        Success! You update your data.
+    </div>
+}
+@if (TempData["UpdateData"] is false)
+{
+    <div class="alert alert-info alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        Can't update data, try again!
+    </div>
+}
+

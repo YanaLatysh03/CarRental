@@ -1,0 +1,23 @@
+﻿@page "/"
+@using CarRentalUIBlazor.Models;
+
+<EditForm class="justify-content-center" style="display: flex; padding-top: 200px" Model="@loginModel">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+
+    <div class="form-group col-md-3">
+        <label for="email">Email</label>
+        <InputText id="email" class="form-control" @bind-Value="loginModel.UserName" />
+        <br />
+        <label for="password">Password</label>
+        <InputText id="password" class="form-control" @bind-Value="loginModel.Password" />
+        <br />
+        <br />
+        <input class="btn btn-primary" type="submit" value="LOGIN" />
+        
+    </div>
+</EditForm>
+
+@code {
+    LoginModel loginModel = new LoginModel();
+}

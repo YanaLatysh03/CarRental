@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  authorization.api:
+    image: ${DOCKER_REGISTRY-}authorizationapi
+    build:
+      context: .
+      dockerfile: Authorization.API\Dockerfile
+
+  car.api:
+    image: ${DOCKER_REGISTRY-}carapi
+    build:
+      context: .
+      dockerfile: Car.API\Dockerfile
+
+
+  rent.api:
+    image: ${DOCKER_REGISTRY-}rentapi
+    build:
+      context: .
+      dockerfile: Rent.API\Dockerfile
+
+
+  user.api:
+    image: ${DOCKER_REGISTRY-}userapi
+    build:
+      context: .
+      dockerfile: User.API\Dockerfile
+
+
+  car.rental.ui:
+    image: ${DOCKER_REGISTRY-}carrentalui
+    build:
+      context: .
+      dockerfile: Car.Rental.UI\Dockerfile
+

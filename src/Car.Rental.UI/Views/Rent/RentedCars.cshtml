@@ -1,0 +1,253 @@
+﻿@using Database.Entities
+@model List<Rent.Models.Response.GetRentsResponseModel>
+
+@{
+    ViewData["Title"] = "GetRentCars";
+    ViewData["ActivePage"] = "RENTED CARS";
+}
+<link rel="stylesheet" href="~/css/GetRentedCars.css" />
+
+@if (TempData["rentStatus"] is true)
+{
+    <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        Success! You change rent status.
+    </div>
+}
+
+<div class="container">
+
+    <ul class="nav nav-tabs">
+        <li><a class="accessTab active" data-toggle="tab" href="#active">Active rents</a></li>
+        <li><a class="accessTab" data-toggle="tab" href="#success">Successful rents</a></li>
+        <li><a class="accessTab" data-toggle="tab" href="#failed">Failed rents</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="active" class="tab-pane fade in active show">
+            <div class="container">
+                <div class="card-columns">
+
+                    @foreach (var item in Model) {
+
+                        @if (item.ShippingAdress.Status == RentStatus.Active)
+                        {
+                            <div class="card">
+                                <img class="card-img-top" src="/Car/GetImageCar?carId=@item.Car.Id" height="300">
+                                <div class="card-body">
+                                    <p><span class="data">Country: </span>@item.ShippingAdress.Country</p>
+                                    <p><span class="data">City: </span>@item.ShippingAdress.City</p>
+                                    <p><span class="data">From: </span>@item.ShippingAdress.DateFrom</p>
+                                    @if (item.Car.IsAccident)
+                                    {
+                                        <h7>The car was in an accident</h7>
+                                    }
+                                    else
+                                    {
+                                        <h7>The car wasn't' in an accident</h7>
+                                    }
+                                    <div class="row">
+                                        <div class="col">
+                                            <a href="#" data-toggle="modal" data-target="#myModal">Detail</a>
+                                            <div class="modal fade" id="myModal" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>
+                                                                <span class="data">Dealer: </span>@item.Dealer.FirstName @item.Dealer.LastName
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">Dealer email: </span>@item.Dealer.Email
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">Dealer phone number: </span>@item.Dealer.PhoneNumber
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">Address: </span>@item.ShippingAdress.Country, @item.ShippingAdress.City,
+                                                                @item.ShippingAdress.Street, @item.ShippingAdress.House,
+                                                                @item.ShippingAdress.Building, @item.ShippingAdress.Appartment
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">Time: </span>from @item.ShippingAdress.DateFrom to @item.ShippingAdress.DateTo
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">Is advance payment: </span>@item.ShippingAdress.IsAdvancePayment
+                                                            </p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <a class="btn changeSt" asp-controller="Rent" asp-action="ChangeRentStatus" asp-route-rentId=@item.ShippingAdress.Id asp-route-status=@RentStatus.Successful>Shift</a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="btn changeSt" asp-controller="Rent" asp-action="ChangeRentStatus" asp-route-rentId=@item.ShippingAdress.Id asp-route-status=@RentStatus.Failed>Failed</a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="btn carInf" asp-controller="Car" asp-action="GetCarById" asp-route-carId=@item.Car.Id>Rented Car</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+        </div>
+        <div id="success" class="tab-pane fade">
+            
+            <div class="container">
+                <div class="card-columns">
+
+                    @foreach (var item in Model)
+                    {
+                        @if (item.ShippingAdress.Status == RentStatus.Successful){
+
+                            <div class="card">
+                                <img class="card-img-top" src="/Car/GetImageCar?carId=@item.Car.Id" height="300">
+                                <div class="card-body">
+                                    <p><span class="data">Country: </span>@item.ShippingAdress.Country</p>
+                                    <p><span class="data">City: </span>@item.ShippingAdress.City</p>
+                                    <p><span class="data">Time from: </span>@item.ShippingAdress.DateFrom</p>
+                                    @if (item.Car.IsAccident)
+                                    {
+                                        <h7>The car was in an accident</h7>
+                                    }
+                                    else
+                                    {
+                                        <h7>The car wasn't' in an accident</h7>
+                                    }
+                                    <div class="row">
+                                        <div class="col">
+                                            <a href="#" data-toggle="modal" data-target="#myModal">Detail</a>
+                                            <div class="modal fade" id="myModal" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>
+                                                                <span class="data">dealer: </span>@item.Dealer.FirstName @item.Dealer.LastName
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">dealer email: </span>@item.Dealer.Email
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">dealer phone number: </span>@item.Dealer.PhoneNumber
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">address: </span>@item.ShippingAdress.Country, @item.ShippingAdress.City,
+                                                                @item.ShippingAdress.Street, @item.ShippingAdress.House,
+                                                                @item.ShippingAdress.Building, @item.ShippingAdress.Appartment
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">time: </span>from @item.ShippingAdress.DateFrom to @item.ShippingAdress.DateTo
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">is advance payment: </span>@item.ShippingAdress.IsAdvancePayment
+                                                            </p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <a class="btn carInf" asp-controller="Car" asp-action="GetCarById" asp-route-carId=@item.Car.Id>Rented Car</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }  
+                    }
+                </div>
+            </div>
+        </div>
+        <div id="failed" class="tab-pane fade">
+            
+            <div class="container">
+                <div class="card-columns">
+
+                    @foreach (var item in Model)
+                    {
+                        @if (item.ShippingAdress.Status == RentStatus.Successful) {
+
+                            <div class="card">
+                                <img class="card-img-top" src="/Car/GetImageCar?carId=@item.Car.Id" height="300">
+                                <div class="card-body">
+                                    <p><span class="data">Country: </span>@item.ShippingAdress.Country</p>
+                                    <p><span class="data">City: </span>@item.ShippingAdress.City</p>
+                                    <p><span class="data">Time from: </span>@item.ShippingAdress.DateFrom</p>
+                                    @if (item.Car.IsAccident)
+                                    {
+                                        <h7>The car was in an accident</h7>
+                                    }
+                                    else
+                                    {
+                                        <h7>The car wasn't' in an accident</h7>
+                                    }
+                                    <div class="row">
+                                        <div class="col">
+                                            <a href="#" data-toggle="modal" data-target="#myModal">Detail</a>
+                                            <div class="modal fade" id="myModal" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>
+                                                                <span class="data">dealer: </span>@item.Dealer.FirstName @item.Dealer.LastName
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">dealer email: </span>@item.Dealer.Email
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">dealer phone number: </span>@item.Dealer.PhoneNumber
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">address: </span>@item.ShippingAdress.Country, @item.ShippingAdress.City,
+                                                                @item.ShippingAdress.Street, @item.ShippingAdress.House,
+                                                                @item.ShippingAdress.Building, @item.ShippingAdress.Appartment
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">time: </span>from @item.ShippingAdress.DateFrom to @item.ShippingAdress.DateTo
+                                                            </p>
+                                                            <p>
+                                                                <span class="data">is advance payment: </span>@item.ShippingAdress.IsAdvancePayment
+                                                            </p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <a class="btn carInf" asp-controller="Car" asp-action="GetCarById" asp-route-carId=@item.Car.Id>Rented Car</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

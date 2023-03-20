@@ -1,0 +1,40 @@
+﻿body {
+}
+
+.pb-3, .py-3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inside {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fbc948;
+    color: white;
+    border: 2px solid black;
+    padding: 20px;
+    width: 700px;
+    margin-top: 200px;
+    height: 400px;
+}
+
+h3 {
+    font-size: 1.2rem;
+    margin-top: 50px;
+    font-weight: 600;
+    color: black;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-top: 20px;
+    font-weight: 700;
+    color: black;
+}
+
+h1 {
+    font-size: 5.5rem;
+    color: black;
+}

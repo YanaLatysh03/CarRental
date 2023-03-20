@@ -1,0 +1,57 @@
+﻿body {
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 70px;
+}
+
+.form-group {
+    width: 250px;
+}
+
+.form-control {
+    border-color: #212529a3;
+}
+
+.form-control:focus {
+    border-color: #e38f0e;
+    box-shadow: 0 0 0 0.25rem rgb(191 98 39 / 25%);
+}
+
+label {
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    color: #212529;
+    background-color: white;
+    border-color: #212529;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #c22f1b;
+    border-color: #151616;
+}
+
+.btn {
+    font-weight: 700;
+    width: 100px;
+}
+
+.alert {
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.pb-3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

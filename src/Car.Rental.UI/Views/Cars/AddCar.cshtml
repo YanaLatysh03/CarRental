@@ -1,0 +1,47 @@
+﻿@model Car.Rental.UI.Models.Car.AddCarRequestModel
+@{
+    ViewData["Title"] = "AddCar";
+    ViewData["ActivePage"] = "ADD CAR";
+}
+
+<link rel="stylesheet" href="~/css/Addingcar.css" />
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>Year</label>
+        <input type="number" class="form-control" asp-for="Year" placeholder="Year">
+    </div>
+    <div class="form-group">
+        <label>Price</label>
+        <input type="number" class="form-control" asp-for="Price" placeholder="Price">
+    </div>
+    <div class="form-group">
+        <label>Color</label>
+        <input type="text" class="form-control" asp-for="Color" placeholder="Color">
+    </div>
+    <div class="form-group">
+        <label>Brand</label>
+        <input type="text" class="form-control" asp-for="Brand" placeholder="Brand">
+    </div>
+    <div class="form-check checkbox-lg">
+        <label>Was in accident</label>
+        <input type="checkbox" value="true" asp-for="IsAccident" placeholder="Accident">
+    </div>
+    <label class="custom-file" id="customFile">
+        <input type="file" asp-for="Image" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp">
+        <span class="custom-file-control form-control-file"></span>
+    </label>
+    <div>
+        <input class="btn btn-primary" type="submit" asp-controller="Cars" asp-action="AddCar" value="ADD" />
+    </div>
+    @if (@TempData["successAdd"] is true)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            Success! You added car.
+        </div>
+    }
+</form>
+
+
+

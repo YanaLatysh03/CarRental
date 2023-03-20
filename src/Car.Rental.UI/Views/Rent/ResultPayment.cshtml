@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewData["Title"] = "ResultPayment";
+}
+<style>
+    .pb-3, .py-3 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .inside {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #51c37e33;
+        color: white;
+        border: 2px solid black;
+        padding: 50px;
+        width: 700px;
+        margin-top: 200px;
+        height: 400px;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+        margin-top: 50px;
+        font-weight: 600;
+        color: black;
+    }
+
+    h2 {
+        font-size: 2rem;
+        margin-top: 20px;
+        font-weight: 700;
+        color: black;
+    }
+
+    h1 {
+        font-size: 3rem;
+        color: black;
+    }
+
+</style>
+<div class="inside">
+    <h1>PAYMENT RESULT</h1>
+    <h2>SUCCESS</h2>
+    <h3>YOU SUCCESSFULLY RENTED THE CAR</h3>
+</div>
+
+<script>
+    let country = localStorage.getItem("country");
+    let city = localStorage.getItem("city");
+    let street = localStorage.getItem("street");
+    let house = localStorage.getItem("house");
+    let building = localStorage.getItem("building");
+    let appartment = localStorage.getItem("appartment");
+    let carId = localStorage.getItem("carId");
+    let dateFrom = localStorage.getItem("dateFrom");
+    let dateTo = localStorage.getItem("dateTo");
+
+    const data = {
+        country: country,
+        city: city,
+        street: street,
+        house: house,
+        building: building,
+        appartment: appartment,
+        carId: carId,
+        dateFrom: dateFrom,
+        dateTo: dateTo
+    }
+
+    async function addRent() {
+        const response = await fetch("https://localhost:5001/Rent/AddRent", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        });
+    }
+    
+    if ("@ViewData["resultPayment"]" == "true"){
+        
+        addRent();
+    }
+    
+</script>
+

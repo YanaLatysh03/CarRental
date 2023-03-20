@@ -1,0 +1,125 @@
+﻿@using Database.Entities
+@model List<Car.Models.Response.GetDealerCarsResponseModel>
+@{
+    ViewData["Title"] = "DealerCars";
+    ViewData["ActivePage"] = "MY CARS";
+}
+
+<link rel="stylesheet" href="~/css/DealerCars.css" />
+
+<div class="container">
+
+    <ul class="nav nav-tabs">
+        <li><a class="accessTab active" data-toggle="tab" href="#rented">Rented cars</a></li>
+        <li><a class="accessTab" data-toggle="tab" href="#free">Free cars</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="rented" class="tab-pane fade in active show">
+            <div class="container">
+                <div class="card-columns">
+
+                    @foreach (var item in Model)
+                    {
+                        if (item.Car.Access == RentAccess.Rented)
+                        {
+                            @foreach (var rent in item.Rents) 
+                            {
+                                @if (rent.Status == RentStatus.Active) 
+                                {
+                                    <div class="card">
+                                        <img class="card-img-top" src="/Car/GetImageCar?carId=@item.Car.Id" height="300">
+                                        <div class="card-body">
+                                            <p><span class="data">Brand: </span>@item.Car.Brand</p>
+                                            <p><span class="data">Year: </span>@item.Car.Year</p>
+                                            <p><span class="data">Price: </span>@item.Car.Price</p>
+                                            <p><span class="data">Color: </span>@item.Car.Color</p>
+                                            @if (item.Car.IsAccident)
+                                            {
+                                                <h7>The car was in an accident</h7>
+                                            }
+                                            else
+                                            {
+                                                <h7>The car wasn't' in an accident</h7>
+                                            }
+                                            <div class="row">
+                                                <div class="col">
+                                                    <a href="#" data-toggle="modal" data-target="#myModal">Detail</a>
+                                                    <div class="modal fade" id="myModal" role="dialog">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <p>
+                                                                        <span class="data">Renter: </span>@rent.Users[0].FirstName @rent.Users[0].LastName
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="data">Renter email: </span>@rent.Users[0].Email
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="data">Renter phone number: </span>@rent.Users[0].PhoneNumber
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="data">Address: </span>@rent.Country, @rent.City,
+                                                                        @rent.Street, @rent.House,
+                                                                        @rent.Building, @rent.Appartment
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="data">Time: </span>from @rent.DateFrom to @rent.DateTo
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="data">Advance payment: </span>@rent.IsAdvancePayment
+                                                                    </p>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            } 
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div id="free" class="tab-pane fade">
+            <div class="container">
+                <div class="card-columns">
+
+                    @foreach (var item in Model)
+                    {
+                        if (item.Car.Access == RentAccess.Free)
+                        {
+                            <div class="card">
+                                <img class="card-img-top" src="/Car/GetImageCar?carId=@item.Car.Id" height="300">
+                                <div class="card-body">
+                                    <p><span class="data">Brand: </span>@item.Car.Brand</p>
+                                    <p><span class="data">Year: </span>@item.Car.Year</p>
+                                    <p><span class="data">Price: </span>@item.Car.Price</p>
+                                    <p><span class="data">Color: </span>@item.Car.Color</p>
+                                    @if (item.Car.IsAccident)
+                                    {
+                                        <h7>The car was in an accident</h7>
+                                    }
+                                    else
+                                    {
+                                        <h7>The car wasn't' in an accident</h7>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

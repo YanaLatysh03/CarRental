@@ -1,0 +1,265 @@
+﻿    @{
+    ViewData["Title"] = "RentCar";
+    ViewData["ActivePage"] = "RENT CAR";
+    }
+
+    <link rel="stylesheet" href="~/css/RentCar.css" />
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <form class="formAddress" id="formAddress">
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>Country</label>
+                <input id="country" type="text" class="form-control" placeholder="Country">
+            </div>
+            <div class="form-group">
+                <label>City</label>
+                <input id="city" type="text" class="form-control" placeholder="City">
+            </div>
+            <div class="form-group">
+                <label>Street</label>
+                <input id="street" type="text" class="form-control" placeholder="Street">
+            </div>
+            <div class="form-group">
+                <label>Date from</label>
+                <input id="dateFrom" type="date" class="form-control" placeholder="Date">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>House</label>
+                <input id="house" type="text" class="form-control" placeholder="House">
+            </div>
+            <div class="form-group">
+                <label>Building</label>
+                <input id="building" type="text" class="form-control" placeholder="Building">
+            </div>
+            <div class="form-group">
+                <label>Appartment</label>
+                <input id="appartment" type="text" class="form-control" placeholder="Appartment">
+            </div>
+            <div class="form-group">
+                <label>Date to</label>
+                <input id="dateTo" type="date" class="form-control" placeholder="Date">
+            </div>
+        </div>
+    </div>
+    <div class="btn-group">
+        <button id="addressNext" type="button" class="btn btn-primary">NEXT</button>
+    </div>
+    </form>
+
+    <form class="formPayment" id="formPayment">
+    <div id="payment-element">
+        <!--Stripe.js injects the Payment Element-->
+    </div>
+    <div class="form-group">
+        <label>Amount</label>
+        <input id="amount" type="text" class="form-control" disabled>
+    </div>
+    <div class="form-group">
+        <label>Currency</label>
+        <input id="currency" type="text" class="form-control" disabled>
+    </div>
+    <button id="submit">
+        <div class="spinner hidden" id="spinner"></div>
+        <span id="button-text">Pay now</span>
+    </button>
+    <div class="btn-group">
+        <button id="test" type="button" class="btn btn-primary">Test</button>
+    </div>
+    <div id="payment-message" class="hidden"></div>
+    </form>
+
+    <script>
+
+    const stripe = Stripe("pk_test_51M5e6kA7xouVGvdGwErza00ViKgc93YX91G54aZn2YolJwrIeJtrDQYgZ8Gkq28VU3ZxZzjCtGUFKXkTLdnFOkPI00m6oNXyl1");
+    let elements;
+    const item = { id: "@ViewData["carId"]" };
+    localStorage.setItem("carId", "@ViewData["carId"]");
+
+    //Event for addressNext
+    document
+        .querySelector("#addressNext")
+        .addEventListener("click", storeLocalStorage);
+
+    document
+        .querySelector("#addressNext")
+        .addEventListener("click", changeAddressForm);
+
+    document
+        .querySelector("#addressNext")
+        .addEventListener("click", getPaymentForm);
+
+    document
+        .querySelector("#addressNext")
+        .addEventListener("click", initialize);
+
+    document
+        .querySelector("#addressNext")
+        .addEventListener("click", checkStatus);
+
+    //Event for formPayment
+    document
+        .querySelector("#formPayment")
+        .addEventListener("submit", handleSubmit);
+    
+    //Save data in LocalStorage
+    async function storeLocalStorage(e) {
+        let inputCountry = document.getElementById("country");
+        localStorage.setItem("country", inputCountry.value);
+
+        let inputCity = document.getElementById("city");
+        localStorage.setItem("city", inputCity.value);
+
+        let inputStreet = document.getElementById("street");
+        localStorage.setItem("street", inputStreet.value);
+
+        let inputHouse = document.getElementById("house");
+        localStorage.setItem("house", inputHouse.value);
+
+        let inputBuilding = document.getElementById("building");
+        localStorage.setItem("building", inputBuilding.value);
+
+        let inputAppartment = document.getElementById("appartment");
+        localStorage.setItem("appartment", inputAppartment.value);
+
+        let inputDatefrom = document.getElementById("dateFrom");
+        localStorage.setItem("dateFrom", inputDatefrom.value);
+
+        console.log(localStorage.getItem("dateFrom"));
+
+        let inputDateTo = document.getElementById("dateTo");
+        localStorage.setItem("dateTo", inputDateTo.value);
+    }
+
+    //Test
+    document
+        .querySelector("#test")
+        .addEventListener("click", test);
+
+    async function test(e) {
+
+        window.location.href = "https://localhost:5001/Rent/GetResultPayment";
+    }
+
+    async function changeAddressForm(e) {
+        var form = await document.getElementById("formAddress");
+
+        form.style.display = "none"
+    }
+
+    async function getPaymentForm(e) {
+        var form = await document.getElementById("formPayment");
+
+        form.style.display = "flex"
+    }
+
+    async function initialize(e) {
+
+        const response = await fetch("https://localhost:5001/rent/createpaymentintent", {
+            method: "post",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(item),
+        });
+
+        const { clientSecret, payment, currency } = await response.json();
+
+        document.getElementById("amount").placeholder = payment;
+        document.getElementById("currency").placeholder = currency;
+
+        const appearance = {
+            theme: 'stripe',
+        };
+        elements = stripe.elements({ appearance, clientSecret });
+
+        const paymentelementoptions = {
+            layout: "tabs",
+        };
+
+        const paymentelement = elements.create("payment", paymentelementoptions);
+        paymentelement.mount("#payment-element");
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setLoading(true);
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+
+            confirmParams: {
+                // Make sure to change this to your payment completion page
+                return_url: "https://localhost:5001/Rent/GetResultPayment",
+            },
+        });
+        
+        // This point will only be reached if there is an immediate error when
+        // confirming the payment. Otherwise, your customer will be redirected to
+        // your `return_url`. For some payment methods like iDEAL, your customer will
+        // be redirected to an intermediate site first to authorize the payment, then
+        // redirected to the `return_url`.
+        if (error.type === "card_error" || error.type === "validation_error") {
+            showMessage(error.message);
+        } else {
+            showMessage("An unexpected error occurred.");
+        }
+
+        setLoading(false);
+    }
+
+    async function checkStatus(e) {
+        const clientSecret = new URLSearchParams(window.location.search).get(
+            "payment_intent_client_secret"
+        );
+
+        if (!clientSecret) {
+            return;
+        }
+
+        const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
+
+        switch (paymentIntent.status) {
+            case "succeeded":
+                showMessage("Payment succeeded!");
+                break;
+            case "processing":
+                showMessage("Your payment is processing.");
+                break;
+            case "requires_payment_method":
+                showMessage("Your payment was not successful, please try again.");
+                break;
+            default:
+                showMessage("Something went wrong.");
+                break;
+        }
+    }
+
+    function showMessage(messageText) {
+        const messageContainer = document.querySelector("#payment-message");
+
+        messageContainer.classList.remove("hidden");
+        messageContainer.textContent = messageText;
+
+        setTimeout(function () {
+            messageContainer.classList.add("hidden");
+            messageText.textContent = "";
+        }, 4000);
+    }
+
+    function setLoading(isLoading) {
+        if (isLoading) {
+            // Disable the button and show a spinner
+            document.querySelector("#submit").disabled = true;
+            document.querySelector("#spinner").classList.remove("hidden");
+            document.querySelector("#button-text").classList.add("hidden");
+        } else {
+            document.querySelector("#submit").disabled = false;
+            document.querySelector("#spinner").classList.add("hidden");
+            document.querySelector("#button-text").classList.remove("hidden");
+        }
+    }
+
+    </script>
+
